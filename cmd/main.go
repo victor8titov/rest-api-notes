@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/victor8titov/rest-api-notes/internal/adaptor"
-	"github.com/victor8titov/rest-api-notes/internal/sevice/http"
+	"github.com/victor8titov/rest-api-notes/internal/service/http"
 	"go.uber.org/zap"
 )
 

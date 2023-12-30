@@ -1,0 +1,336 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Simple app notes.",
+        "title": "REST API Notes API",
+        "contact": {
+            "name": "Viktor",
+            "email": "nulltomato@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/api/v1",
+    "paths": {
+        "/note": {
+            "get": {
+                "description": "Getting list with pagination.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Getting list of notes.",
+                "parameters": [
+                    {
+                        "description": "params for pagination",
+                        "name": "pagination",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.RequestListNotes"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#/definitions/note.ListNotes"
+                        }
+                    },
+                    "400": {
+                        "description": "invalid request params",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "failed during inner process",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create note.",
+                "parameters": [
+                    {
+                        "description": "fields for new note",
+                        "name": "note",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/notes.CreateArgs"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "$ref": "#/definitions/note.Note"
+                        }
+                    },
+                    "400": {
+                        "description": "invalid request params",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "failed during inner process",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/note/{noteID}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get note by ID.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of note that you want getting",
+                        "name": "noteID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "schema": {
+                            "$ref": "#/definitions/note.Note"
+                        }
+                    },
+                    "400": {
+                        "description": "invalid request params",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "failed during inner process",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update note.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of note that you want updating",
+                        "name": "noteID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "fields for updating note",
+                        "name": "fields",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.RequestUpdateNote"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated note",
+                        "schema": {
+                            "$ref": "#/definitions/note.Note"
+                        }
+                    },
+                    "400": {
+                        "description": "invalid request params",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "failed during inner process",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete note by ID.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of note that you want to delete",
+                        "name": "noteID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success deleting",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "invalid request params",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "failed during inner process",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "http.RequestListNotes": {
+            "type": "object",
+            "properties": {
+                "direction": {
+                    "type": "integer"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "offset": {
+                    "type": "integer"
+                },
+                "sortBy": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.RequestUpdateNote": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "note.ListNotes": {
+            "type": "object",
+            "properties": {
+                "notes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/note.Note"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "note.Note": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "notes.CreateArgs": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

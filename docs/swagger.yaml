@@ -1,0 +1,220 @@
+basePath: /api/v1
+definitions:
+  http.RequestListNotes:
+    properties:
+      direction:
+        type: integer
+      limit:
+        type: integer
+      offset:
+        type: integer
+      sortBy:
+        type: string
+    type: object
+  http.RequestUpdateNote:
+    properties:
+      body:
+        type: string
+      label:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  note.ListNotes:
+    properties:
+      notes:
+        items:
+          $ref: '#/definitions/note.Note'
+        type: array
+      total:
+        type: integer
+    type: object
+  note.Note:
+    properties:
+      body:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      label:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+  notes.CreateArgs:
+    properties:
+      body:
+        type: string
+      label:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: nulltomato@gmail.com
+    name: Viktor
+  description: Simple app notes.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: REST API Notes API
+  version: "1.0"
+paths:
+  /note:
+    get:
+      consumes:
+      - application/json
+      description: Getting list with pagination.
+      parameters:
+      - description: params for pagination
+        in: body
+        name: pagination
+        required: true
+        schema:
+          $ref: '#/definitions/http.RequestListNotes'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/note.ListNotes'
+        "400":
+          description: invalid request params
+          schema:
+            type: string
+        "404":
+          description: not found
+          schema:
+            type: string
+        "500":
+          description: failed during inner process
+          schema:
+            type: string
+      summary: Getting list of notes.
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: fields for new note
+        in: body
+        name: note
+        required: true
+        schema:
+          $ref: '#/definitions/notes.CreateArgs'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/note.Note'
+        "400":
+          description: invalid request params
+          schema:
+            type: string
+        "404":
+          description: not found
+          schema:
+            type: string
+        "500":
+          description: failed during inner process
+          schema:
+            type: string
+      summary: Create note.
+  /note/{noteID}:
+    delete:
+      parameters:
+      - description: ID of note that you want to delete
+        in: path
+        name: noteID
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success deleting
+          schema:
+            type: string
+        "400":
+          description: invalid request params
+          schema:
+            type: string
+        "404":
+          description: not found
+          schema:
+            type: string
+        "500":
+          description: failed during inner process
+          schema:
+            type: string
+      summary: Delete note by ID.
+    get:
+      parameters:
+      - description: ID of note that you want getting
+        in: path
+        name: noteID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Ok
+          schema:
+            $ref: '#/definitions/note.Note'
+        "400":
+          description: invalid request params
+          schema:
+            type: string
+        "404":
+          description: not found
+          schema:
+            type: string
+        "500":
+          description: failed during inner process
+          schema:
+            type: string
+      summary: Get note by ID.
+    put:
+      parameters:
+      - description: ID of note that you want updating
+        in: path
+        name: noteID
+        required: true
+        type: string
+      - description: fields for updating note
+        in: body
+        name: fields
+        required: true
+        schema:
+          $ref: '#/definitions/http.RequestUpdateNote'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated note
+          schema:
+            $ref: '#/definitions/note.Note'
+        "400":
+          description: invalid request params
+          schema:
+            type: string
+        "404":
+          description: not found
+          schema:
+            type: string
+        "500":
+          description: failed during inner process
+          schema:
+            type: string
+      summary: Update note.
+swagger: "2.0"
